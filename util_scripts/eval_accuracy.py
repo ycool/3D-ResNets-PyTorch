@@ -13,6 +13,7 @@ def get_class_labels(data):
 
 
 def load_ground_truth(ground_truth_path, subset):
+    print("ttt:", ground_truth_path, ":", subset)
     with ground_truth_path.open('r') as f:
         data = json.load(f)
 
