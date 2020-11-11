@@ -162,7 +162,7 @@ def get_inference_data(video_path,
     elif inference_subset == 'val':
         subset = 'validation'
     elif inference_subset == 'test':
-        subset = 'testing'
+        subset = 'test'
     if dataset_name == 'activitynet':
         inference_data = ActivityNet(video_path,
                                      annotation_path,

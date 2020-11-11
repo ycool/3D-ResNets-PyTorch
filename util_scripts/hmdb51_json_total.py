@@ -181,4 +181,4 @@ if __name__ == '__main__':
         
     test_json_path = args.dst_dir_path / 'hmdb51_test.json'
     convert_hmdb51_csv_to_test_json(args.dir_path, args.video_path,
-                                          validation_json_path)
+                                    test_json_path)

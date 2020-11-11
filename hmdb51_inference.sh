@@ -5,7 +5,8 @@ set -x
 python main.py \
        --root_path datasets/hmdb51 \
        --video_path image \
-       --annotation_path hmdb51_3.json \
+       --annotation_path hmdb51_test.json \
+       --inference_subset test \
        --result_path results \
        --dataset hmdb51 \
        --resume_path results/save_200.pth \
@@ -16,6 +17,7 @@ python main.py \
        --no_val \
        --inference \
        --output_topk 5 \
-       --inference_batch_size 1
+       --inference_batch_size 1 \
+       --model resnet2p1d
 
 

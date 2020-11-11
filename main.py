@@ -86,6 +86,7 @@ def get_opt():
 def resume_model(resume_path, arch, model):
     print('loading checkpoint {} model'.format(resume_path))
     checkpoint = torch.load(resume_path, map_location='cpu')
+    print('arch:{} {}'.format(arch, checkpoint['arch']))
     assert arch == checkpoint['arch']
 
     if hasattr(model, 'module'):
@@ -343,6 +344,8 @@ def main_worker(index, opt):
                                       opt.n_finetune_classes)
     if opt.resume_path is not None:
         model = resume_model(opt.resume_path, opt.arch, model)
+
+    print('model after resume:', model)    
     model = make_data_parallel(model, opt.distributed, opt.device)
 
     if opt.pretrain_path:

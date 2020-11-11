@@ -99,6 +99,13 @@ def load_pretrained_model(model, pretrain_path, model_name, n_finetune_classes):
         print('loading pretrained model {}'.format(pretrain_path))
         pretrain = torch.load(pretrain_path, map_location='cpu')
 
+        print('n_finetune_classes:', n_finetune_classes)
+        print('model name:', model_name)
+        print('pretrain_path:', pretrain_path)
+        print('model:', model)
+        print('model input feature:', model.fc.in_features)
+        print('model output feature:', model.fc.out_features)
+        
         model.load_state_dict(pretrain['state_dict'])
         tmp_model = model
         if model_name == 'densenet':

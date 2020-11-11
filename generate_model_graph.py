@@ -11,6 +11,7 @@ import torch.multiprocessing as mp
 import torch.distributed as dist
 from torch.backends import cudnn
 import torchvision
+from torchsummary import summary
 
 from torchviz import make_dot
 from graphviz import Source
@@ -328,19 +329,42 @@ def main_worker(index, opt):
     opt.is_master_node = not opt.distributed or opt.dist_rank == 0
 
     model = generate_model(opt)
+    print('after generating model:', model.fc.in_features,':',  model.fc.out_features)
+    print('feature weights:', model.fc.weight.shape,':',  model.fc.bias.shape)
+
+    if opt.resume_path is not None:
+        model = resume_model(opt.resume_path, opt.arch, model)
+    print('after resume model:', model.fc.in_features,':',  model.fc.out_features)
+    print('feature weights:', model.fc.weight.shape,':',  model.fc.bias.shape)
+    
+#    if opt.pretrain_path:
+#        model = load_pretrained_model(model, opt.pretrain_path, opt.model,
+#                                      opt.n_finetune_classes)
+
+    print('after pretrained  model:', model.fc.in_features,':',  model.fc.out_features)
+    print('feature weights:', model.fc.weight.shape,':',  model.fc.bias.shape)
+    # parameters = model.parameters()
+    # for name, param in model.named_parameters():
+    #     if param.requires_grad:
+    #         print(name, param.data)
+#    summary(model, (3, 112, 112))
+#    return
+
+#    print('model parameters shape', parameters.shape)
 
     (train_loader, train_sampler, train_logger, train_batch_logger,
      optimizer, scheduler) = get_train_utils(opt, model.parameters())
 
     for i, (inputs, targets) in enumerate(train_loader):
         print('input shape:', inputs.shape)
+        print('targets shape:', targets.shape)
         outputs = model(inputs)
         print("output shape", outputs.shape)
-        model_arch = make_dot(outputs, params=dict(model.named_parameters()))
-        print(model_arch)
-        model_arch.render("/apollo/data/model.png", format="png")
-#        Source(model_arch).render('/apollo/data/model.png')
-        print("generating /apollo/data/model.png")
+        # model_arch = make_dot(outputs, params=dict(model.named_parameters()))
+        # print(model_arch)
+        # model_arch.render("/apollo/data/model.png", format="png")
+        # Source(model_arch).render('/apollo/data/model.png')
+        # print("generating /apollo/data/model.png")
         break
     
     # make_dot(yhat, params=dict(list(model.named_parameters()))).render("rnn_torchviz", format="png")
