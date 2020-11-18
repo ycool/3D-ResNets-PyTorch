@@ -17,10 +17,11 @@ set -x
        --no_val \
        --inference \
        --output_topk 5 \
-       --pretrain_path models/ucf101_180.pth \
-       --n_pretrain_classes 51 \
        --inference_batch_size 1
 
+#       --pretrain_path models/ucf101_180.pth \
+#       --n_pretrain_classes 51 \
+    
 #        --ft_begin_module fc  \
     
 #       --pretrain_path models/ucf101_180.pth \

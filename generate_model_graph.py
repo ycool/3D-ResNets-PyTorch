@@ -1,3 +1,5 @@
+from torch.nn.modules.module import _addindent
+
 from pathlib import Path
 import json
 import random
@@ -318,6 +320,33 @@ def save_checkpoint(save_file_path, epoch, arch, model, optimizer, scheduler):
     torch.save(save_states, save_file_path)
 
 
+def torch_summarize(model, show_weights=True, show_parameters=True):
+    """Summarizes torch model by showing trainable parameters and weights."""
+    tmpstr = model.__class__.__name__ + ' (\n'
+    for key, module in model._modules.items():
+        # if it contains layers let call it recursively to get params and weights
+        if type(module) in [
+            torch.nn.modules.container.Container,
+            torch.nn.modules.container.Sequential
+        ]:
+            modstr = torch_summarize(module)
+        else:
+            modstr = module.__repr__()
+        modstr = _addindent(modstr, 2)
+
+        params = sum([np.prod(p.size()) for p in module.parameters()])
+        weights = tuple([tuple(p.size()) for p in module.parameters()])
+
+        tmpstr += '  (' + key + '): ' + modstr 
+        if show_weights:
+            tmpstr += ', weights={}'.format(weights)
+        if show_parameters:
+            tmpstr +=  ', parameters={}'.format(params)
+        tmpstr += '\n'   
+
+    tmpstr = tmpstr + ')'
+    return tmpstr
+    
 def main_worker(index, opt):
     random.seed(opt.manual_seed)
     np.random.seed(opt.manual_seed)
@@ -336,13 +365,14 @@ def main_worker(index, opt):
         model = resume_model(opt.resume_path, opt.arch, model)
     print('after resume model:', model.fc.in_features,':',  model.fc.out_features)
     print('feature weights:', model.fc.weight.shape,':',  model.fc.bias.shape)
-    
+    # summary(model, input_size=(3, 112, 112))
 #    if opt.pretrain_path:
 #        model = load_pretrained_model(model, opt.pretrain_path, opt.model,
 #                                      opt.n_finetune_classes)
 
     print('after pretrained  model:', model.fc.in_features,':',  model.fc.out_features)
     print('feature weights:', model.fc.weight.shape,':',  model.fc.bias.shape)
+    print(torch_summarize(model))
     # parameters = model.parameters()
     # for name, param in model.named_parameters():
     #     if param.requires_grad:

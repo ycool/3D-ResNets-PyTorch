@@ -11,7 +11,7 @@ time python main.py --root_path datasets/hmdb51 \
        --annotation_path hmdb51_total.json \
        --result_path results \
        --dataset hmdb51 \
-       --model preresnet \
+       --model densenet \
        --model_depth 50 \
        --n_classes 51 \
        --batch_size 128 \
