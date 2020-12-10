@@ -323,6 +323,7 @@ def save_checkpoint(save_file_path, epoch, arch, model, optimizer, scheduler):
 def torch_summarize(model, show_weights=True, show_parameters=True):
     """Summarizes torch model by showing trainable parameters and weights."""
     tmpstr = model.__class__.__name__ + ' (\n'
+    num_layer = 0
     for key, module in model._modules.items():
         # if it contains layers let call it recursively to get params and weights
         if type(module) in [
@@ -342,9 +343,11 @@ def torch_summarize(model, show_weights=True, show_parameters=True):
             tmpstr += ', weights={}'.format(weights)
         if show_parameters:
             tmpstr +=  ', parameters={}'.format(params)
-        tmpstr += '\n'   
+        tmpstr += '\n'
+        num_layer += 1
 
     tmpstr = tmpstr + ')'
+    tmpstr = tmpstr + ' num of layer:' + str(num_layer)
     return tmpstr
     
 def main_worker(index, opt):
@@ -390,9 +393,9 @@ def main_worker(index, opt):
         print('targets shape:', targets.shape)
         outputs = model(inputs)
         print("output shape", outputs.shape)
-        # model_arch = make_dot(outputs, params=dict(model.named_parameters()))
-        # print(model_arch)
-        # model_arch.render("/apollo/data/model.png", format="png")
+        model_arch = make_dot(outputs, params=dict(model.named_parameters()))
+        print(model_arch)
+        model_arch.render("/apollo/data/model.png", format="png")
         # Source(model_arch).render('/apollo/data/model.png')
         # print("generating /apollo/data/model.png")
         break

@@ -18,7 +18,7 @@ python main.py \
        --inference \
        --output_topk 5 \
        --inference_batch_size 1 \
-       --model wideresnet
+       --model preresnet
 
 #       --model resnet2p1d
 
