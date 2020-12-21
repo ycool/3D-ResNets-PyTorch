@@ -85,7 +85,7 @@ def generate_model(opt):
             no_max_pool=opt.no_max_pool)
     elif opt.model == 'densenet':
         model = densenet.generate_model(model_depth=opt.model_depth,
-                                        n_classes=opt.n_classes,
+                                        num_classes=opt.n_classes,
                                         n_input_channels=opt.n_input_channels,
                                         conv1_t_size=opt.conv1_t_size,
                                         conv1_t_stride=opt.conv1_t_stride,
