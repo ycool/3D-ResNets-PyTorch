@@ -3,6 +3,10 @@
 set -x 
 
 # baseline
+# input
+#    datasets/hmdb51/hmdb51_test.json
+# output
+#   datasets/hmdb51/results/test.json
 python main.py \
        --root_path datasets/hmdb51 \
        --video_path image \
