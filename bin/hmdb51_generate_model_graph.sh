@@ -1,6 +1,8 @@
 #! /bin/bash
 
 set -x 
+TOP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+cd $TOP_DIR
 
 # python -m pdb generate_model_graph.py \
     python generate_model_graph.py \

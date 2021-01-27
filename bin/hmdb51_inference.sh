@@ -2,6 +2,9 @@
 
 set -x 
 
+TOP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+cd $TOP_DIR
+
 # baseline
 # input
 #    datasets/hmdb51/hmdb51_test.json
