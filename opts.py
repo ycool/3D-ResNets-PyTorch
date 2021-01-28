@@ -4,6 +4,8 @@ from pathlib import Path
 
 def parse_opts():
     parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--fff", help="a dummy argument to fool ipython", default="1")
+
     parser.add_argument('--root_path',
                         default=None,
                         type=Path,
@@ -17,7 +19,7 @@ def parse_opts():
                         type=Path,
                         help='Annotation file path')
     parser.add_argument('--result_path',
-                        default=None,
+                        default='./results/',
                         type=Path,
                         help='Result directory path')
     parser.add_argument(
