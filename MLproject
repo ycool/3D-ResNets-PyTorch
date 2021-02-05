@@ -1,0 +1,48 @@
+name: action-classification
+
+conda_env: conda.yaml
+
+entry_points:
+  train:
+    parameters:
+      learning_rate: {type: float, default: 0.01}
+      momentum: {type: float, default: 0.9}
+      model_depth: {type: int, default: 50}
+      model: {type: string, default: 'resnet'}
+      n_classes: {type: int, default: 51}
+      batch_size: {type: int, default: 128}
+      dataset: {type: string, default: 'hmdb51'}
+
+    command: |
+          python train.py \
+            --learning_rate {learning_rate} --momentum {momentum}
+
+  main2:
+    parameters:
+      learning_rate: {type: float, default: 0.01}
+      momentum: {type: float, default: 0.9}
+
+    command: |
+          python main2.py \
+            --learning_rate {learning_rate} --momentum {momentum}
+  main:
+    parameters:
+      learning_rate: {type: float, default: 0.01}
+      momentum: {type: float, default: 0.9}
+      model_depth: {type: int, default: 50}
+      model: {type: string, default: 'resnet'}
+      n_classes: {type: int, default: 51}
+      batch_size: {type: int, default: 128}
+      dataset: {type: string, default: 'hmdb51'}
+    command: |
+          python main.py --root_path datasets/hmdb51 \
+            --video_path image \
+            --annotation_path hmdb51_total.json \
+            --result_path results \
+            --dataset hmdb51 \
+            --model resnet \
+            --model_depth 50 \
+            --n_classes 51 \
+            --batch_size 128 \
+            --n_threads 4 \
+            --checkpoint 30
