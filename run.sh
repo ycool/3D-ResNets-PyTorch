@@ -8,11 +8,10 @@ export MLFLOW_TRACKING_URI="http://0.0.0.0:8000"
 # conda activate mlflow
 
 # mlflow train demo baseline
-mlflow run -e train . --experiment-name action
+# mlflow run -e train . --experiment-name action
 
 # mlflow action pipeline test
-# mlflow run -e main2 . --experiment-name action
-# mlflow run -e main . --experiment-name action
+mlflow run -e main . --experiment-name action
 
 
 

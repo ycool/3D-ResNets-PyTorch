@@ -31,6 +31,7 @@ from training import train_epoch
 from validation import val_epoch
 import inference
 
+import mlflow.pytorch
 
 def json_serial(obj):
     if isinstance(obj, Path):
@@ -334,7 +335,6 @@ def main_worker(index, opt):
         opt.n_threads = int(
             (opt.n_threads + opt.ngpus_per_node - 1) / opt.ngpus_per_node)
     opt.is_master_node = not opt.distributed or opt.dist_rank == 0
-
     model = generate_model(opt)
     if opt.batchnorm_sync:
         assert opt.distributed, 'SyncBatchNorm only supports DistributedDataParallel.'
@@ -345,7 +345,7 @@ def main_worker(index, opt):
     if opt.resume_path is not None:
         model = resume_model(opt.resume_path, opt.arch, model)
 
-    print('model after resume:', model)    
+    print('model after resume:', model)
     model = make_data_parallel(model, opt.distributed, opt.device)
 
     if opt.pretrain_path:
@@ -398,6 +398,8 @@ def main_worker(index, opt):
             prev_val_loss = val_epoch(i, val_loader, model, criterion,
                                       opt.device, val_logger, tb_writer,
                                       opt.distributed)
+            mlflow.log_metric("loss", prev_val_loss)
+
 
         if not opt.no_train and opt.lr_scheduler == 'multistep':
             scheduler.step()
