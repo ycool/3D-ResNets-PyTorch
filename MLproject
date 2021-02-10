@@ -17,14 +17,30 @@ entry_points:
           python train.py \
             --learning_rate {learning_rate} --momentum {momentum}
 
-  main2:
+  inference:
     parameters:
       learning_rate: {type: float, default: 0.01}
       momentum: {type: float, default: 0.9}
 
     command: |
-          python main2.py \
-            --learning_rate {learning_rate} --momentum {momentum}
+          python main.py \
+              --root_path datasets/hmdb51 \
+              --video_path image \
+              --annotation_path hmdb51_test.json \
+              --inference_subset test \
+              --result_path results \
+              --dataset hmdb51 \
+              --resume_path results/save_200.pth \
+              --n_classes 51 \
+              --n_threads 4 \
+              --no_train \
+              --no_val \
+              --inference \
+              --output_topk 5 \
+              --inference_batch_size 1 \
+              --model_depth 50 \
+              --model resnet
+
   main:
     parameters:
       learning_rate: {type: float, default: 0.01}
@@ -45,4 +61,5 @@ entry_points:
             --n_classes 51 \
             --batch_size 128 \
             --n_threads 4 \
+            --resume_path results/save_200.pth \
             --checkpoint 30

@@ -1,4 +1,4 @@
-name: fuel
+name: mlflow
 channels:
   - pytorch
   - gwerbin

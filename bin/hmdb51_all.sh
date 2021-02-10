@@ -20,6 +20,8 @@ $D/hmdb51_generate_json.sh
 $D/hmdb51_train.sh
 
 # inference test dataset
+# output: datasets/hmdb51/results/test.json
+#    #inference_subset#.json
 $D/hmdb51_inference.sh
 
 # calculate metrics

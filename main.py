@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 import random
 import os
+from urllib.parse import urlparse
 
 import numpy as np
 import torch
@@ -344,8 +345,24 @@ def main_worker(index, opt):
                                       opt.n_finetune_classes)
     if opt.resume_path is not None:
         model = resume_model(opt.resume_path, opt.arch, model)
+        print('resume model from ', opt.resume_path)
 
     print('model after resume:', model)
+
+    # save model to current running id
+    mlflow.pytorch.log_model(model, "action_model")
+    model_path = mlflow.get_artifact_uri("action_model")
+    print('mlflow action model path: ', model_path)
+    # model = mlflow.pytorch.load_model(model_path)
+    mlflow.set_tag("test_tag", 'inference_test')
+
+    # load from previous published model version
+    model_name = 'action_model'
+    model_version = '1'
+    model_uri = "models:/{}/{}".format(model_name, model_version)
+    model = mlflow.pytorch.load_model(model_uri)
+    # return
+                                    
     model = make_data_parallel(model, opt.distributed, opt.device)
 
     if opt.pretrain_path:
