@@ -3,7 +3,7 @@ name: action-classification
 conda_env: conda.yaml
 
 entry_points:
-  train:
+  demo_train:
     parameters:
       learning_rate: {type: float, default: 0.01}
       momentum: {type: float, default: 0.9}
@@ -41,7 +41,7 @@ entry_points:
               --model_depth 50 \
               --model resnet
 
-  main:
+  train:
     parameters:
       learning_rate: {type: float, default: 0.01}
       momentum: {type: float, default: 0.9}
@@ -61,5 +61,4 @@ entry_points:
             --n_classes 51 \
             --batch_size 128 \
             --n_threads 4 \
-            --resume_path results/save_200.pth \
             --checkpoint 30

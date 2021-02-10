@@ -289,6 +289,26 @@ def parse_opts():
                         default=-1,
                         type=int,
                         help='number of nodes for distributed training')
+    parser.add_argument(
+        '--ml_model_name',
+        default='action_model',
+        type=str,
+        help=('Module name in MLFlow'))
+    parser.add_argument(
+        '--ml_model_version',
+        default='',
+        type=str,
+        help=('Module version in MLFlow'))
+    parser.add_argument(
+        '--ml_tag_name',
+        default='',
+        type=str,
+        help=('tag name in MLFlow'))
+    parser.add_argument(
+        '--ml_tag_value',
+        default='',
+        type=str,
+        help=('tag value in MLFlow'))
 
     args = parser.parse_args()
 

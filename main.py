@@ -350,18 +350,20 @@ def main_worker(index, opt):
     print('model after resume:', model)
 
     # save model to current running id
-    mlflow.pytorch.log_model(model, "action_model")
-    model_path = mlflow.get_artifact_uri("action_model")
-    print('mlflow action model path: ', model_path)
+    # mlflow.pytorch.log_model(model, "action_model")
+    # model_path = mlflow.get_artifact_uri("action_model")
+    # print('mlflow action model path: ', model_path)
     # model = mlflow.pytorch.load_model(model_path)
-    mlflow.set_tag("test_tag", 'inference_test')
+    if opt.ml_tag_name != '' and opt.ml_tag_value != '':
+        # mlflow.set_tag("test_tag", 'inference_test')
+        mlflow.set_tag(opt.ml_tag_name, opt.ml_tag_value)
 
     # load from previous published model version
-    model_name = 'action_model'
-    model_version = '1'
-    model_uri = "models:/{}/{}".format(model_name, model_version)
-    model = mlflow.pytorch.load_model(model_uri)
-    # return
+    if opt.ml_model_name != '' and opt.ml_model_version != '':
+        # model_name = 'action_model'
+        # model_version = '1'
+        model_uri = "models:/{}/{}".format(opt.ml_model_name, opt.ml_model_version)
+        model = mlflow.pytorch.load_model(model_uri)
                                     
     model = make_data_parallel(model, opt.distributed, opt.device)
 
@@ -410,6 +412,8 @@ def main_worker(index, opt):
                 save_file_path = opt.result_path / 'save_{}.pth'.format(i)
                 save_checkpoint(save_file_path, i, opt.arch, model, optimizer,
                                 scheduler)
+                if opt.ml_model_name != '':
+                    mlflow.pytorch.log_model(model, opt.ml_model_name)
 
         if not opt.no_val:
             prev_val_loss = val_epoch(i, val_loader, model, criterion,

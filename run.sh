@@ -11,9 +11,9 @@ export MLFLOW_TRACKING_URI="http://0.0.0.0:8000"
 # mlflow run -e train . --experiment-name action
 
 # mlflow action pipeline test
-# mlflow run -e main . --experiment-name action
+mlflow run -e train . --experiment-name action
 
-mlflow run -e inference . --experiment-name action
+# mlflow run -e inference . --experiment-name action
 
     # python generate_model_graph.py \
     #    --root_path datasets/hmdb51 \
